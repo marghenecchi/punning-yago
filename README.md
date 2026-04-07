@@ -1,6 +1,7 @@
 # Punning in YAGO
 
 Internship repository
+
 Supervisors: Fabian M. Suchanek, Thomas Bonald.
 
 ## Goal
@@ -26,5 +27,7 @@ Study how to handle punning in YAGO: entities that act as both a class and an in
 - [ ] Use case analysis (products, diseases, animals, languages)
 - [ ] Formalism mapping (OWL, RDF, Wikidata, DL, SKOS)
 - [ ] Literature review
+
       ...
+      
 - [ ] Proposed solution for YAGO
