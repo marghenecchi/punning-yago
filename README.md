@@ -1,6 +1,6 @@
 # Punning in YAGO
 
-This repository contains my work for the internship on handling punning in knowledge bases.
+This repository contains general work for the internship on handling punning in knowledge bases.
 
 ## Goals
 
