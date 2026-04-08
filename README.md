@@ -1,11 +1,6 @@
 # Punning in YAGO
 
-Internship repository
-Supervisors: Fabian M. Suchanek, Thomas Bonald.
-
-## Goal
-
-Study how to handle punning in YAGO: entities that act as both a class and an instance simultaneously.
+This repository contains my work for the internship on handling punning in knowledge bases.
 
 ## Repository Structure
 
