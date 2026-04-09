@@ -4,8 +4,8 @@
 
 | Formalism                     | File                       | Status      |
 | ----------------------------- | -------------------------- | ----------- |
-| OWL 2                         | [owl.md](owl.md)           | todo        |
-| RDF / RDFS                    | [rdf.md](rdf.md)           | todo        |
+| OWL 2                         | [owl.md](owl.md)           | draft       |
+| RDF / RDFS                    | [rdf.md](rdf.md)           | draft       |
 | Wikidata                      | [wikidata.md](wikidata.md) | todo        |
 | Description Logic             | [dl.md](dl.md)             | todo        |
 | SKOS                          | [skos.md](skos.md)         | todo        |
