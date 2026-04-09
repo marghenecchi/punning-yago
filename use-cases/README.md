@@ -12,7 +12,7 @@ For each use case I plan to analyze:
 
 | File                                               | Domain               | Key example            | Status  | Structure                        |
 | -------------------------------------------------- | -------------------- | ---------------------- | ------- | -------------------------------- |
-| [products.md](products.md)                         | Commercial products  | todo                   | todo    | class/instance hierarchy         |
+| [products.md](products.md)                         | Commercial products  | iPhone 13              | draft   | class/instance hierarchy         |
 | [diseases.md](diseases.md)                         | Diseases             | draft                  | COVID19 | class/instance hierarchy         |
 | [animals.md](animals.md)                           | Biological taxonomy  | Canis lupus            | draft   | deep taxonomy, generic sentences |
 | [languages.md](languages.md)                       | Languages            | todo                   | todo    | class/instance hierarchy         |
