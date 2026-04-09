@@ -16,7 +16,7 @@ For each use case I plan to analyze:
 | [diseases.md](diseases.md)                         | Diseases             | draft                  | COVID19 | class/instance hierarchy         |
 | [animals.md](animals.md)                           | Biological taxonomy  | Canis lupus            | draft   | deep taxonomy, generic sentences |
 | [languages.md](languages.md)                       | Languages            | todo                   | todo    | class/instance hierarchy         |
-| [chemicals.md](chemicals.md)                       | Chemical substances  | H₂O, methane           | todo    | deep taxonomy (like bio)         |
+| [chemicals.md](chemicals.md)                       | Chemical substances  | H₂O, aspirin           | draft   | deep taxonomy (like bio)         |
 | [admin-divisions.md](admin-divisions.md)           | Administrative units | France > Île-de-France | todo    | geographic hierarchy             |
 | [genres.md](genres.md)                             | Cultural genres      | Rock > Classic rock    | todo    | deep taxonomy + generic facts    |
 | [event-series.md](event-series.md)                 | Recurring events     | Olympics, Nobel Prize  | todo    | temporal recurrence              |
