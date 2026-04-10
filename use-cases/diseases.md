@@ -88,10 +88,13 @@ The instanceIndicator mechanism remains asymmetric across domains:
 
 | Formalism | How it handles it                                                              | Pros              | Cons                                              |
 | --------- | ------------------------------------------------------------------------------ | ----------------- | ------------------------------------------------- |
-| OWL 2     | explicit punning — same IRI as both class and individual                       | formally correct  | requires OWL 2 DL, not supported in all reasoners |
+| RDF/RDFS  | P279 and P31 are both just triples; no mechanism to distinguish class fact from instance fact; domain/range inference fires on both equally | permissive | RDFS cannot separate "COVID-19 is a subtype of coronavirus disease" (class fact) from "COVID-19 is a disease entity" (instance fact) — both look like triples on the same subject |
+| OWL 2     | explicit punning via two-domain semantics — COVID-19 as class (of cases) and individual (with ICD code, pathogen); domain inferences on entity facts do not bleed into the class extension | formally correct | requires OWL 2 DL; and the class role (typing individual cases) is semantically real but practically useless if individual cases are never represented in the KB |
 | Wikidata  | both P31 and P279, no resolution                                               | pragmatic         | no single clear interpretation                    |
 | SNOMED CT | diseases are concepts, not classes; subsumption is P279-like but concept-level | medically correct | complex model, not RDF-native                     |
 | YAGO 4.5  | no medical class → diseases disappear from the KB                              | avoids punning    | entire medical domain absent from YAGO            |
+
+Note: diseases are the use case where the class role is most semantically justified (individual COVID-19 cases exist and could in principle be represented), yet YAGO derives the least benefit from it. The punning cost is real, but so is the cost of opting out.
 
 ---
 

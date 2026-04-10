@@ -136,10 +136,13 @@ You can still traverse `_:English_generic_instance rdf:type yago:English` to rea
 
 | Formalism | How it handles it                                       | Pros                 | Cons                                        |
 | --------- | ------------------------------------------------------- | -------------------- | ------------------------------------------- |
-| OWL 2     | explicit punning — English as both class and individual | formally correct     | requires OWL 2 DL                           |
+| RDF/RDFS  | language IRI appears as class (in P279 hierarchy) and as object of `inLanguage`, `officialLanguage`; no barrier to this in RDF | permissive | without punning semantics, any system processing the graph must choose: is `yago:Italian` a class or a stable entity to link to? RDFS offers no mechanism to signal intent; domain/range inference on properties like `schema:inLanguage` (range `schema:Language`) would type Italian as a language instance, but Italian is already flagged as a class — the two inferences conflict |
+| OWL 2     | two-domain punning: Italian as class (of dialects/varieties, if useful) and individual (referenceable entity in `inLanguage`, `officialLanguage` triples); the individual role is exactly what YAGO's step 04 tries to patch with blank nodes | formally solves the reference problem | requires OWL 2 DL; the class role (Italian as a class of dialects) is weaker than in animals or chemicals — the extension is fuzzy |
 | Wikidata  | P31 and P279 coexist on the same item                   | pragmatic            | no single clear interpretation              |
 | Glottolog | pure hierarchy, no instance facts                       | linguistically clean | not a KR system                             |
 | YAGO 4.5  | class (P279 wins, no instanceIndicator)                 | taxonomy preserved   | language references replaced by blank nodes |
+
+Note: languages are the only use case where the punning problem manifests primarily as a **reference integrity failure** rather than a data loss. The step 04 blank node workaround (`_:Italian_generic_instance rdf:type yago:Italian`) is YAGO's ad hoc substitute for OWL 2's individual role: it creates a stable referent for the language as an object of properties, but breaks join queries because blank nodes lack a stable IRI identity.
 
 ---
 
