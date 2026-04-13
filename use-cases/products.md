@@ -49,114 +49,42 @@ The first four look syntactically identical but require different interpretation
 
 ### How YAGO handles it
 
+_Empirically verified against `05-yago-final-wikipedia.tsv` on 2026-04-13. The previous analysis here predicted a "double failure" where both entities disappear, this was totally incorrect._
+
 #### Step 02 (`make-taxonomy.py`)
 
-The `instanceIndicators` set includes `wdt:P176` (manufacturer) and `wdt:P178` (developer):
-
-```python
-instanceIndicators = {
-    "wdt:P171",  # parent taxon -> instance of taxon
-    "wdt:P176",  # manufacturer -> instance of Product
-    "wdt:P178",  # developer -> instance of Product
-    "wdt:P580"   # start time -> instance of Event
-}
-```
-
-Both iPhone (Q11922) and iPhone 13 (Q108118280) have `wdt:P176` (manufacturer: Apple) in Wikidata. The instanceIndicator fires for both. Neither enters `yagoTaxonomyDown`, so neither becomes a YAGO class.
+`wdt:P176` (manufacturer) fires the instanceIndicator for both iPhone (Q2766) and iPhone 13 (Q108118280). Neither enters the taxonomy as a class.
 
 #### Step 03 (`make-facts.py`)
 
-Since neither entity is in `yagoTaxonomyUp`, `make-facts.py` tries to assign a type via `wdt:P31`:
+P31 typing succeeds: `yago:Smartphone_Model` and `yago:Smartphone_Model_Series` are in `yagoTaxonomyUp` (not excluded by `badClasses`), so both entities get valid types and their entity facts are preserved.
 
-```python
-TYPE_PREDICATES = [Prefixes.wikidataType, ...]  # wdt:P31, occupation, genre, position
+```turtle
+yago:IPhone       rdf:type    yago:Smartphone_Model_Series .
+yago:IPhone       schema:url  "https://en.wikipedia.org/wiki/IPhone" .
+yago:IPhone       rdfs:label  "iPhone"@en .
 
-for obj in entityFacts.objectsOf(mainEntity, predicate):
-    if obj in yagoTaxonomyUp:          # only if the type is itself a YAGO class
-        entityFacts.add((mainEntity, Prefixes.rdfType, obj))
+yago:IPhone_13    rdf:type              yago:Smartphone_Model .
+yago:IPhone_13    schema:manufacturer   yago:Apple_Inc .
+yago:IPhone_13    schema:dateCreated    "2021-09-14"^^xsd:date .
+yago:IPhone_13    schema:price          "+909"^^yago:Euro .
+yago:IPhone_13    schema:height         "+146.7"^^yago:Millimetre .
 ```
 
-The problem is that specific product models in Wikidata are primarily described via `wdt:P279` (subclass of the product line), not via `wdt:P31`. `wdt:P279` is not in `TYPE_PREDICATES` — it is never used for typing instances. So:
+The taxonomy chain: `yago:Smartphone_Model_Series rdfs:subClassOf yago:Mobile_Phone_Series`.
 
-- iPhone's `wdt:P31` = "product line" (Q1366112) — not a YAGO class → no type
-- iPhone 13's `wdt:P31` is either absent or maps to something not in `yagoTaxonomyUp` → no type
-
-In both cases, `types` is empty:
-
-```python
-if not types:
-    self.writer.writeMetaFact(mainEntity, Prefixes.rdfType, Prefixes.schemaThing,
-                              Prefixes.ysReason, '"no valid type among ..."')
-    return True
-```
-
-Both entities are written only to the meta file as `schema:Thing` with reason `"no valid type"`. Neither appears in the main YAGO facts.
-
----
-
-### The double failure
-
-The `instanceIndicators` mechanism was designed to protect products: if an entity has a manufacturer, treat it as an instance (not a class). The intent is correct. But in practice in this case the mechanism produces a double failure:
-
-1. **Step 02**: the instanceIndicator fires correctly — iPhone and iPhone 13 are excluded from the class taxonomy, which is the right call.
-2. **Step 03**: both entities need a valid type via `wdt:P31`. But `wdt:P31` for specific product models either points to meta-categories ("product line") that are not YAGO classes, or is absent entirely. `wdt:P279` (the natural typing chain for products) is never consulted for instance typing.
-
-Result: both iPhone and iPhone 13 disappear from YAGO entirely.
-
-| Entity    | Has P176? | Excluded from taxonomy? | P31 maps to YAGO class? | YAGO result          |
-| --------- | --------- | ----------------------- | ----------------------- | -------------------- |
-| iPhone    | Yes       | Yes                     | No ("product line")     | meta only, invisible |
-| iPhone 13 | Yes       | Yes                     | No (absent or unmapped) | meta only, invisible |
-
-This is worse than the disease case: COVID-19 ends up as a useless class but at least survives in YAGO. Products with a manufacturer are actively excluded from the taxonomy and then fail to be typed as instances.
-
----
-
-### Root cause: second-order classes
-
-In Wikidata, specific product models are typed as instances of **second-order classes**, classes whose instances are themselves classes:
-
-```
-iPhone 13  --wdt:P31-->  "smartphone model"  --wdt:P31-->  second-order class (Q24017414)
-```
-
-"Smartphone model" is a class of product models (each of which is a class of individual units). It is not a class of physical objects. YAGO explicitly excludes second-order classes and all their descendants:
-
-```python
-badClasses = {
-    ...
-    "wd:Q24017414",   # second-order class
-    ...
-}
-# Classes that will not be added to YAGO, and whose children won't be added either
-```
-
-"Smartphone model" is a child of a `badClass` → excluded from `yagoTaxonomyUp`. So when `make-facts.py` checks `if obj in yagoTaxonomyUp` for iPhone 13's `wdt:P31 = "smartphone model"`, the check fails. No type is assigned.
-
-This is correct behavior from YAGO's perspective: "smartphone model" is genuinely a second-order class (a class of classes), and YAGO is right to exclude it. But the side effect is that iPhone 13, whose only `wdt:P31` leads through a second-order class, ends up with no valid type and disappears.
-
----
-
-### What would fix it TBD
-
-One option: add `wdt:P279` to `TYPE_PREDICATES` for entities that have been excluded from the taxonomy via instanceIndicators. If iPhone 13 has `wdt:P279` pointing to iPhone, and iPhone (despite having P176) was not added to the taxonomy, then climb the P279 chain until a YAGO class is found (e.g., smartphone → schema:Product).
-
-Another option: add "product line" (Q1366112) and similar meta-categories to the YAGO taxonomy so that their subtypes become valid YAGO classes, but this risks re-introducing the punning problem by making product lines into classes again.
-
-A third option (analogous to biological taxonomy): add a `yago:productLine` property on the `schema:Product` shape to preserve the P279 link at the instance level, independently of typing. But this requires the parent entity (iPhone) to survive make-facts.py, which it currently does not.
-
----
+The instanceIndicator mechanism works correctly for products: both entities are instances with their entity-level facts preserved, not classes. The class role (typing individual physical units) is dropped, but individual units are not in YAGO anyway.
 
 ### Comparison with biological taxonomy
 
-|                                   | Bio-taxonomy (Canis lupus)         | Product (iPhone 13)                            |
-| --------------------------------- | ---------------------------------- | ---------------------------------------------- |
-| Is the class role useful?         | Yes, individual wolves exist       | Unlikely, individual units are not in YAGO     |
-| Are entity-level facts important? | Yes (parentTaxon, IUCN status)     | Yes (manufacturer, date, price, GTIN)          |
-| Is the hierarchy preserved?       | Yes, via `schema:parentTaxon`      | No, P279 chain is not used for instance typing |
-| YAGO's choice                     | instance (flatten to taxon)        | intended: instance — actual: invisible         |
-| Information lost                  | cannot type individual wolves      | the entity disappears entirely                 |
-| Mechanism                         | dedicated instanceIndicator (P171) | instanceIndicators (P176, P178) + P31 failure  |
+|                                   | Bio-taxonomy (Canis lupus)         | Product (iPhone 13)                              |
+| --------------------------------- | ---------------------------------- | ------------------------------------------------ |
+| Is the class role useful?         | Yes, individual wolves exist       | No, individual units are not in YAGO             |
+| Are entity-level facts important? | Yes (parentTaxon, IUCN status)     | Yes (manufacturer, date, price)                  |
+| Is the hierarchy preserved?       | Yes, via `schema:parentTaxon`      | Partially — model series hierarchy exists        |
+| YAGO's choice                     | instance (flatten to taxon)        | instance (instanceIndicator + P31 typing)        |
+| Information lost                  | cannot type individual wolves      | cannot type individual units; color links broken |
+| Mechanism                         | dedicated instanceIndicator (P171) | instanceIndicators (P176, P178) + P31 success    |
 
 ---
 
@@ -168,9 +96,7 @@ A third option (analogous to biological taxonomy): add a `yago:productLine` prop
 | OWL 2      | two-domain punning: iPhone 13 as class (of units) and individual (with manufacturer, date); each level of the three-level hierarchy handled independently; the class and individual interpretations do not interfere | formally complete per level | three-level hierarchy requires stacked punning: iPhone (class + individual) contains iPhone 13 (class + individual) — the two levels are semantically independent, and OWL 2 provides no way to express the hierarchical relationship between them as both classes and individuals simultaneously                                                               |
 | Wikidata   | P31 + P279 co-exist, manufacturer on the item                                                                                                                                                                        | pragmatic, data-rich        | no single interpretation; both roles co-exist                                                                                                                                                                                                                                                                                                                   |
 | GS1 / GTIN | product classes (GTIN prefixes) vs. individual items (serial numbers)                                                                                                                                                | commercially precise        | no RDF-native representation                                                                                                                                                                                                                                                                                                                                    |
-| YAGO 4.5   | instanceIndicator fires correctly, but P31 fails → entity disappears                                                                                                                                                 | intent correct              | product entities vanish from the KB                                                                                                                                                                                                                                                                                                                             |
-
-Note: the product case is unique in having both the deepest punning hierarchy (three levels) and a specific Wikidata modeling issue: product models are typed as instances of **second-order classes** (classes whose instances are themselves classes), which YAGO explicitly excludes via `badClasses`. This double exclusion (instanceIndicator + badClass via P31 chain) is the root cause of the double failure, and is a structural property of how commercial products are modeled in Wikidata.
+| YAGO 4.5   | instanceIndicator fires correctly, P31 typing succeeds → entities survive as instances with facts; colors replaced by generic instances                                                                              | works for entity facts      | three-level hierarchy flattened; color/attribute links broken by generic instances                                                                                                                                                                                                                                                                              |
 
 ---
 
@@ -186,14 +112,12 @@ Without iPhone 13 as an instance:
 - Cannot attach manufacturer, release date, dimensions, price, GTIN
 - This is a real loss, these are the core facts one wants about a product
 
-**Verdict**: YAGO's intent to make iPhone 13 an instance is correct. But the implementation fails: the instanceIndicator excludes the entity from the taxonomy, and then the P31-based typing cannot recover it because Wikidata encodes product models primarily via P279, not P31. The entity disappears. The fix requires either consulting P279 for instance typing (when P31 fails), or re-examining which Wikidata meta-categories ("product line", "smartphone model") should be brought into the YAGO taxonomy.
+**Verdict**: YAGO handles products correctly as instances, entity facts (manufacturer, price, dimensions, date) are preserved. The class role (typing individual physical units) is dropped, but this is a trade-off since individual units are not in YAGO.
 
 ---
 
 ## Questions
 
 - [ ] Is there any product that successfully becomes a `schema:Product` instance in YAGO? What P31 does it have?
-- [ ] Would adding `wdt:P279` to the instance-typing logic (as a fallback when P31 fails) fix the product disappearance, and would it introduce any undesired side effects?
-- [ ] Should "product line" (Q1366112) and "smartphone model" be added to the YAGO taxonomy, so their P279-children get valid types?
 - [ ] How does the `schema:isVariantOf` property in schema.org relate to the product-line / model distinction?
 - [ ] How does GS1's GTIN hierarchy (brand + product class + item reference) compare to Wikidata's P279 chain for products?
