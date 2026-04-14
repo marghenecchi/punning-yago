@@ -18,3 +18,7 @@ Data problems and observations encountered while working on punning.
 - Record labels (Q18127) end up under creativeWork instead of Organization, maybe add creative work in record label
 
 - Academic disciplines (mathematics, philosophy, etc.) are fully absent from YAGOso yago:fieldOfWork objects always fail;add a yago:AcademicDiscipline class with ys:fromClass wd:Q11862829, wd:Q4671286?
+
+- `yago:Wolf` (Q18498, Canis lupus) is present in the local YAGO data (`05-yago-final-wikipedia.tsv`) with full facts but does not appear on yago-knowledge.org.
+
+- same for iphone ?
