@@ -1,0 +1,45 @@
+@prefix ex:   <http://example.org/> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix owl:  <http://www.w3.org/2002/07/owl#> .
+@prefix xsd:  <http://www.w3.org/2001/XMLSchema#> .
+
+# ── Taxonomy (class hierarchy) ────────────────────────────────────────────────
+
+ex:Canidae       rdf:type        owl:Class ;
+                 rdfs:subClassOf ex:Animal .
+
+ex:Canis         rdf:type        owl:Class ;
+                 rdfs:subClassOf ex:Canidae .
+
+ex:Canis_lupus   rdf:type        owl:Class ;
+                 rdfs:subClassOf ex:Canis .
+
+# ── Canis_lupus as individual (punning) ───────────────────────────────────────
+
+# (B) entity facts — about the taxon as a named scientific entity
+ex:Canis_lupus   rdf:type               ex:Taxon ;
+                 ex:parentTaxon         ex:Canis ;
+                 ex:conservationStatus  ex:LeastConcern ;
+                 ex:firstDescribedBy    ex:Linnaeus ;
+                 ex:firstDescribedYear  "1758"^^xsd:integer .
+
+# (A) generic sentences — about wolves-as-a-kind
+ex:Canis_lupus   ex:eats    ex:Deer ;
+                 ex:livesIn ex:Forest .
+
+# ── Individual wolf ───────────────────────────────────────────────────────────
+
+# (C) individual typing
+ex:Tito          rdf:type     ex:Canis_lupus ;
+                 ex:name      "Tito" ;
+                 ex:locatedIn ex:RomeZoo ;
+                 ex:hasGPSTag "TAG-001" .        # legitimate: the individual has a GPS tag
+
+# ── Wrong inference examples ──────────────────────────────────────────────────
+#
+# Ex3 — false negative triggers wrong type
+#   We assert "wolves are NOT domesticated".
+#   RDFS ignores the boolean value and fires rdfs2 on the triple's existence.
+#   → infers: Canis_lupus rdf:type DomesticAnimal  (opposite of what we mean)
+ex:Canis_lupus   ex:isDomesticated  "false"^^xsd:boolean .

@@ -1,0 +1,40 @@
+@prefix ex:   <http://example.org/> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xsd:  <http://www.w3.org/2001/XMLSchema#> .
+
+# ── What YAGO actually stores ─────────────────────────────────────────────────
+#
+# Real YAGO IRI: yago:Wolf (wd:Q18498), verified from server data.
+# Here modelled as ex:Canis_lupus for consistency with the desired graph.
+#
+# Stage 02: P171 (parentTaxon) fires instanceIndicator →
+#           Wolf is NOT added to the class taxonomy.
+#
+# Stage 03: Wolf is processed as an entity.
+#           P31 chain → wd:Q16521 → schema:Taxon → gets rdf:type ex:Taxon.
+#           Properties survive only if defined in the YAGO schema for schema:Taxon.
+#
+# What survives (verified from real YAGO data):
+#   - schema:parentTaxon    (wdt:P171, in schema)
+#   - yago:consumes         (wdt:P1034, predator-prey — in schema for Taxon)
+#   - rdfs:label, schema:alternateName, schema:url, schema:image, ...
+#
+# What is dropped:
+#   - eats, livesIn, typicalPackSize  — no corresponding YAGO property
+#   - conservationStatus              — not mapped in the schema for Taxon
+#                                       (verified: absent from real YAGO output)
+#
+# Result: Wolf is a plain instance of schema:Taxon. No class role whatsoever.
+
+ex:Canis_lupus   rdf:type        ex:Taxon ;
+                 ex:parentTaxon  ex:Canis ;
+                 ex:consumes     ex:Deer ;       # ← SURVIVES (wdt:P1034 is in schema)
+                 ex:consumes     ex:Reindeer ;
+                 ex:consumes     ex:Moose .
+
+# ex:Canis_lupus ex:eats ex:Deer        ← DROPPED (no yago:eats in schema)
+# ex:Canis_lupus ex:livesIn ex:Forest   ← DROPPED (no habitat property in schema)
+# ex:Canis_lupus ex:conservationStatus  ← DROPPED (not mapped for schema:Taxon)
+
+# ex:Tito rdf:type ex:Canis_lupus       ← IMPOSSIBLE (Canis_lupus is an instance)

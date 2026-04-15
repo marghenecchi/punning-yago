@@ -112,12 +112,15 @@ if mainEntity in yagoTaxonomyUp:
 
 Then `handleDomain` runs with `fullTransitiveClasses = {"rdfs:Class"}`. The domain of all chemical properties (`yago:chemicalStructure`, `yago:contains`, `yago:interacts`) is `schema:BioChemEntity`, not `rdfs:Class`. Domain check fails. All entity-level facts are dropped.
 
-What YAGO keeps for H₂O:
+What YAGO keeps for H₂O (empirically verified in `05-yago-final-wikipedia.tsv`, 2026-04-13):
 
 ```turtle
-yago:Water  rdf:type         rdfs:Class .
-yago:Water  rdfs:subClassOf  yago:Oxide .        # via taxonomy
-yago:Water  rdfs:label       "water"@en .
+yago:Water  rdf:type              rdfs:Class .
+yago:Water  rdfs:label            "water"@en .
+yago:Water  rdfs:comment          "chemical compound whose molecules are formed by two hydrogen atoms and one oxygen atom"@en .
+yago:Water  schema:alternateName  "dihydrogen oxide"@en .
+yago:Water  schema:url            "https://en.wikipedia.org/wiki/Water"^^xsd:anyURI .
+yago:Water  schema:image          <...> .
 ```
 
 What is lost:
@@ -131,7 +134,7 @@ yago:Water  yago:casNumber           "7732-18-5" .
 yago:Water  yago:chemicalStructure   <...> .
 ```
 
-Same for aspirin: it becomes a class, all pharmaceutical facts (molecular weight, CAS number, ATC code, mechanism of action, drug interactions) are dropped.
+Same for aspirin: `rdf:type rdfs:Class`, label and Wikipedia metadata survive, all pharmaceutical facts (molecular formula, CAS number, ATC code, mechanism of action, drug interactions) are dropped. Note also that `yago:Water` is not in `05-yago-final-taxonomy.tsv` — it is not part of the exported class hierarchy, only a bare `rdfs:Class` node in the facts file.
 
 ---
 
