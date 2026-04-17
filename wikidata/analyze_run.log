@@ -1,0 +1,304 @@
+Processing 10000 items in batches of 50...
+  batch 1/200 ... ok
+  batch 2/200 ... ok
+  batch 3/200 ... ok
+  batch 4/200 ... ok
+  batch 5/200 ... ok
+  batch 6/200 ... ok
+  batch 7/200 ... ok
+  batch 8/200 ... ok
+  batch 9/200 ... ok
+  batch 10/200 ... ok
+  batch 11/200 ... ok
+  batch 12/200 ... ok
+  batch 13/200 ... ok
+  batch 14/200 ... ok
+  batch 15/200 ... ok
+  batch 16/200 ... ok
+  batch 17/200 ... ok
+  batch 18/200 ... ok
+  batch 19/200 ... ok
+  batch 20/200 ... ok
+  batch 21/200 ... ok
+  batch 22/200 ... ok
+  batch 23/200 ... ok
+  batch 24/200 ... ok
+  batch 25/200 ... ok
+  batch 26/200 ... ok
+  batch 27/200 ... ok
+  batch 28/200 ... ok
+  batch 29/200 ... ok
+  batch 30/200 ... ok
+  batch 31/200 ... ok
+  batch 32/200 ... ok
+  batch 33/200 ... ok
+  batch 34/200 ... ok
+  batch 35/200 ... ok
+  batch 36/200 ... ok
+  batch 37/200 ... ok
+  batch 38/200 ... ok
+  batch 39/200 ... ok
+  batch 40/200 ... ok
+  batch 41/200 ... ok
+  batch 42/200 ... ok
+  batch 43/200 ... ok
+  batch 44/200 ... ok
+  batch 45/200 ... ok
+  batch 46/200 ... ok
+  batch 47/200 ... ok
+  batch 48/200 ... ok
+  batch 49/200 ... ok
+  batch 50/200 ... ok
+  batch 51/200 ... ok
+  batch 52/200 ... ok
+  batch 53/200 ... ok
+  batch 54/200 ... ok
+  batch 55/200 ... ok
+  batch 56/200 ... ok
+  batch 57/200 ... ok
+  batch 58/200 ... ok
+  batch 59/200 ... ok
+  batch 60/200 ... ok
+  batch 61/200 ... ok
+  batch 62/200 ... ok
+  batch 63/200 ... ok
+  batch 64/200 ... ok
+  batch 65/200 ... ok
+  batch 66/200 ... ok
+  batch 67/200 ... ok
+  batch 68/200 ... ok
+  batch 69/200 ... ok
+  batch 70/200 ... ok
+  batch 71/200 ... ok
+  batch 72/200 ... ok
+  batch 73/200 ... ok
+  batch 74/200 ... ok
+  batch 75/200 ... ok
+  batch 76/200 ... ok
+  batch 77/200 ... ok
+  batch 78/200 ... ok
+  batch 79/200 ... ok
+  batch 80/200 ... ok
+  batch 81/200 ... ok
+  batch 82/200 ... ok
+  batch 83/200 ... ok
+  batch 84/200 ... ok
+  batch 85/200 ... ok
+  batch 86/200 ... ok
+  batch 87/200 ... ok
+  batch 88/200 ... ok
+  batch 89/200 ... ok
+  batch 90/200 ... ok
+  batch 91/200 ... ok
+  batch 92/200 ... ok
+  batch 93/200 ... ok
+  batch 94/200 ... ok
+  batch 95/200 ... ok
+  batch 96/200 ... ok
+  batch 97/200 ... ok
+  batch 98/200 ... ok
+  batch 99/200 ... ok
+  batch 100/200 ... ok
+  batch 101/200 ... ok
+  batch 102/200 ... ok
+  batch 103/200 ... ok
+  batch 104/200 ... ok
+  batch 105/200 ... ok
+  batch 106/200 ... ok
+  batch 107/200 ... ok
+  batch 108/200 ... ok
+  batch 109/200 ... ok
+  batch 110/200 ... ok
+  batch 111/200 ... ok
+  batch 112/200 ... ok
+  batch 113/200 ... ok
+  batch 114/200 ... ok
+  batch 115/200 ... ok
+  batch 116/200 ... ok
+  batch 117/200 ... ok
+  batch 118/200 ... ok
+  batch 119/200 ... ok
+  batch 120/200 ... ok
+  batch 121/200 ... ok
+  batch 122/200 ... ok
+  batch 123/200 ... ok
+  batch 124/200 ... ok
+  batch 125/200 ... ok
+  batch 126/200 ... ok
+  batch 127/200 ... ok
+  batch 128/200 ... ok
+  batch 129/200 ... ok
+  batch 130/200 ... ok
+  batch 131/200 ... ok
+  batch 132/200 ... ok
+  batch 133/200 ... ok
+  batch 134/200 ... ok
+  batch 135/200 ... ok
+  batch 136/200 ... ok
+  batch 137/200 ... ok
+  batch 138/200 ... ok
+  batch 139/200 ... ok
+  batch 140/200 ... ok
+  batch 141/200 ... ok
+  batch 142/200 ... ok
+  batch 143/200 ... ok
+  batch 144/200 ... ok
+  batch 145/200 ... ok
+  batch 146/200 ... ok
+  batch 147/200 ... ok
+  batch 148/200 ... ok
+  batch 149/200 ... ok
+  batch 150/200 ... ok
+  batch 151/200 ... ok
+  batch 152/200 ... ok
+  batch 153/200 ... ok
+  batch 154/200 ... ok
+  batch 155/200 ... ok
+  batch 156/200 ... ok
+  batch 157/200 ... ok
+  batch 158/200 ... ok
+  batch 159/200 ... ok
+  batch 160/200 ... ok
+  batch 161/200 ... ok
+  batch 162/200 ... ok
+  batch 163/200 ... ok
+  batch 164/200 ... ok
+  batch 165/200 ... ok
+  batch 166/200 ... ok
+  batch 167/200 ... ok
+  batch 168/200 ... ok
+  batch 169/200 ... ok
+  batch 170/200 ... ok
+  batch 171/200 ... ok
+  batch 172/200 ... ok
+  batch 173/200 ... ok
+  batch 174/200 ... ok
+  batch 175/200 ... ok
+  batch 176/200 ... ok
+  batch 177/200 ... ok
+  batch 178/200 ... ok
+  batch 179/200 ... ok
+  batch 180/200 ... ok
+  batch 181/200 ... ok
+  batch 182/200 ... ok
+  batch 183/200 ... ok
+  batch 184/200 ... ok
+  batch 185/200 ... ok
+  batch 186/200 ... ok
+  batch 187/200 ... ok
+  batch 188/200 ... ok
+  batch 189/200 ... ok
+  batch 190/200 ... ok
+  batch 191/200 ... ok
+  batch 192/200 ... ok
+  batch 193/200 ... ok
+  batch 194/200 ... ok
+  batch 195/200 ... ok
+  batch 196/200 ... ok
+  batch 197/200 ... ok
+  batch 198/200 ... ok
+  batch 199/200 ... ok
+  batch 200/200 ... ok
+Fetching labels for shared classes...
+Enriched CSV → /Users/margheritanecchi/Desktop/ip/internship/punning-yago/wikidata/enriched.csv
+Summary      → /Users/margheritanecchi/Desktop/ip/internship/punning-yago/wikidata/summary.txt
+
+============================================================
+PUNNING ANALYSIS — 10000 items processed
+Total (item, shared_class) pairs : 181
+Distinct shared classes          : 67
+Items with ≥1 shared class       : 176
+
+TOP 30 SHARED CLASSES
+------------------------------------------------------------
+     39  food                                      (Q2095)
+           → ladyfinger (Q12494)
+           → Tacacá (Q564491)
+           → Scaccia (Q690165)
+     15  color                                     (Q1075)
+           → Tuscan red (Q513479)
+           → mauve (Q604079)
+           → tangerine (Q846504)
+     12  school                                    (Q3914)
+           → combined school (Q5150914)
+           → leadership school (Q6508683)
+           → public policy school (Q11391922)
+      7  alcoholic beverage                        (Q154)
+           → digestif (Q1344463)
+           → sorghum beer (Q2905047)
+           → Pruno (Q17118943)
+      7  laptop                                    (Q3962)
+           → ThinkPad R400 (Q68222805)
+           → ThinkPad W500 (Q68222968)
+           → Thinkpad X60s (Q68224522)
+      5  heritage site                             (Q358)
+           → Heritage structures in Hyderabad, India (Q5739200)
+           → Charity Stone (Q28016054)
+           → Heritage monument in Thuringia (Q85192701)
+      5  red wine                                  (Q1827)
+      5  non-coding RNA                            (Q427087)
+           → DNAJC9-AS1 (Q18058240)
+           → LSAMP-AS1 (Q18068033)
+           → SNRPF-DT (Q20762342)
+      4  sport                                     (Q349)
+           → sport crossbow shooting (Q4443729)
+           → locksport (Q6665845)
+           → international sport (Q22662532)
+      4  wine                                      (Q282)
+           → Elba DOC (Q3721167)
+      4  human sexual behavior                     (Q608)
+           → penetrative sex (Q137806372)
+           → marital sex (Q137806440)
+           → vulval sex (Q137807894)
+      4  forest                                    (Q4421)
+           → wedding forest (Q1316116)
+           → Community forestry (Q5154959)
+           → várzea forest (Q17103938)
+      4  Carnival                                  (Q4618)
+      3  cooperative                               (Q4539)
+           → transport cooperative (Q119607174)
+           → Nonghyup (Q137766179)
+      2  human                                     (Q5)
+           → B A Gopinadh Babu (Q137737519)
+      2  fiber                                     (Q161)
+           → rubber fiber (Q12047375)
+           → chemical fiber (Q12651945)
+      2  vodka                                     (Q374)
+           → Smirnoff (Q777721)
+           → Stolichnaya (Q1539525)
+      2  cuneiform                                 (Q401)
+           → Old Persian cuneiform (Q1471822)
+           → Urartian cuneiform (Q16474600)
+      2  loudspeaker                               (Q570)
+           → studio monitor (Q543405)
+           → subwoofer (Q770289)
+      2  geology                                   (Q1069)
+           → geology of Africa (Q9267082)
+           → Geology of South Africa (Q12094878)
+      2  fruit                                     (Q1364)
+           → quince (Q2751465)
+      2  diplomacy                                 (Q1889)
+           → defence diplomacy (Q5251284)
+           → Twitter diplomacy (Q16927722)
+      2  microprocessor                            (Q5297)
+           → MOS 6507 (Q1196571)
+           → Hudson Soft HuC6280 (Q1323830)
+      2  electrical switch                         (Q5320)
+           → pressure switch (Q1261034)
+           → direct current switch (Q106714813)
+      1  beer                                      (Q44)
+           → green beer (Q10860471)
+      1  architectural heritage monument           (Q811165)
+           → Heritage structures in Hyderabad, India (Q5739200)
+      1  cultural heritage                         (Q210272)
+           → Heritage structures in Hyderabad, India (Q5739200)
+      1  fish                                      (Q152)
+      1  leather                                   (Q286)
+           → crocodile skin (Q2957536)
+      1  history                                   (Q309)
+           → Slavic history (Q113182660)
+
+NOISE / EXCLUDED
+------------------------------------------------------------
+  9824 items excluded (shared class in NOISE_CLASSES or no overlap after API fetch)
+  - Q7187 (filtered as noise)
