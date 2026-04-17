@@ -1,0 +1,65 @@
+@prefix ex:   <http://example.org/> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xsd:  <http://www.w3.org/2001/XMLSchema#> .
+
+# ── What YAGO actually stores ─────────────────────────────────────────────────
+#
+# UC1 — H₂O (wd:Q283)
+#
+# Stage 02: H₂O has wdt:P279 → added to wikidataTaxonomyDown.
+#           No instanceIndicator fires (no P171, P176, P178, P580 as direct triple).
+#           H₂O enters the taxonomy as a class node.
+#
+# Stage 03: H₂O is in the taxonomy → assigned rdf:type rdfs:Class.
+#           All entity-level facts fail the domain check and are dropped.
+#           There is no schema:ChemicalSubstance in the YAGO 4.5 schema,
+#           so H₂O receives no rdf:type and no properties survive.
+#
+# Stage 04: :contains expects a schema:ChemicalSubstance in its range;
+#           H₂O is a class (not a typed instance) → link is dropped.
+#
+# Taxonomy chain is preserved:
+ex:H2O  rdf:type        rdfs:Class ;
+        rdfs:subClassOf ex:Oxide ;
+        rdfs:subClassOf ex:HydrogenCompound ;
+        rdfs:subClassOf ex:InorganicCompound .
+
+# ex:H2O ex:molecularFormula "H2O"      ← DROPPED (no entity facts for classes)
+# ex:H2O ex:boilingPoint "100"          ← DROPPED (same reason)
+# ex:H2O ex:molarMass "18.015"          ← DROPPED (same reason)
+# ex:H2O ex:CASNumber "7732-18-5"       ← DROPPED (same reason)
+# ex:MyBottle ex:contains ex:H2O        ← DROPPED (H2O not a typed instance)
+
+# ── UC2 — Aspirin (wd:Q18005)
+#
+# Same mechanism: Aspirin has wdt:P279 → becomes a class.
+# No schema:Drug in YAGO 4.5 → no entity facts survive.
+# Stage 04: ex:prescribes range check fails → generic instance created.
+#
+ex:Aspirin  rdf:type        rdfs:Class ;
+            rdfs:subClassOf ex:NSAID ;
+            rdfs:subClassOf ex:Analgesic .
+
+ex:Aspirin_generic_instance  rdf:type  ex:Aspirin .   # synthetic node from Stage 04
+
+ex:Prescription_42  ex:prescribes  ex:Aspirin_generic_instance .
+# ex:Prescription_42 ex:prescribes ex:Aspirin   ← BROKEN (range check fails)
+
+# ex:Aspirin ex:mechanismOfAction ex:COX_inhibitor  ← DROPPED
+# ex:Aspirin ex:treats ex:Headache                  ← DROPPED
+# ex:Aspirin ex:CASNumber "50-78-2"                 ← DROPPED
+
+# ── UC3 — ATC codes
+#
+# ATC codes have wdt:P279 (subclass of ATCClassification) → become classes.
+# No schema:ATCClassification in YAGO → no entity facts (atcCode, atcDescription).
+#
+ex:ATC_A    rdf:type  rdfs:Class .
+ex:ATC_A01  rdf:type  rdfs:Class ;
+            rdfs:subClassOf ex:ATC_A .
+
+# ex:ATC_A ex:atcCode "A"                       ← DROPPED
+# ex:ATC_A ex:atcDescription "Alimentary..."    ← DROPPED
+# ex:ATC_A01 rdf:type ex:ATC_A                  ← impossible as typed instance
+#                                                   (ATC_A has no rdf:type in schema)

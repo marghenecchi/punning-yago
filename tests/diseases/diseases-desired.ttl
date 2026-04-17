@@ -1,0 +1,29 @@
+@prefix ex:   <http://example.org/> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-syntax-ns#> .
+@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix owl:  <http://www.w3.org/2002/07/owl#> .
+@prefix xsd:  <http://www.w3.org/2001/XMLSchema#> .
+
+# ── Taxonomy (class hierarchy) ────────────────────────────────────────────────
+
+ex:COVID_19  rdf:type        owl:Class ;
+             rdfs:subClassOf ex:CoronavirusDisease ;
+             rdfs:subClassOf ex:RespiratoryDisease .
+
+# ── COVID-19 as individual (punning) ─────────────────────────────────────────
+
+# UC1: entity facts — about COVID-19 as a named disease entity
+ex:COVID_19  rdf:type         ex:Disease ;
+             ex:hasICD         "U07.1" ;
+             ex:causedBy       ex:SARS_CoV_2 ;
+             ex:firstReported  "2019-12-01"^^xsd:date .
+
+# UC2: generic sentences — about COVID-19 in general, not every case
+ex:COVID_19  ex:affects   ex:RespiratorySystem ;
+             ex:symptoms  ex:Fever ;
+             ex:symptoms  ex:Cough .
+
+# ── UC3: direct link from another entity ─────────────────────────────────────
+
+ex:JavierMarias  rdf:type      ex:Person ;
+                 ex:deathCause ex:COVID_19 .

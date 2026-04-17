@@ -5,26 +5,22 @@
 
 # ── Classes ───────────────────────────────────────────────────────────────────
 
-ex:Animal        rdf:type  rdfs:Class .
-ex:LivingThing   rdf:type  rdfs:Class .
-ex:Taxon         rdf:type  rdfs:Class .
+ex:Animal              rdf:type  rdfs:Class .
+ex:Taxon               rdf:type  rdfs:Class .
 ex:ConservationStatus  rdf:type  rdfs:Class .
-
-ex:Animal        rdfs:subClassOf  ex:LivingThing .
-ex:Taxon         rdfs:subClassOf  ex:LivingThing .
 
 # ── Properties ────────────────────────────────────────────────────────────────
 
-# generic-sentence properties (about the kind / its members)
-ex:eats          rdfs:domain  ex:Animal ;
-                 rdfs:range   ex:LivingThing .
+# generic-sentence properties (about the kind)
+ex:eats     rdfs:domain  ex:Animal ;
+            rdfs:range   ex:Animal .
 
-ex:livesIn       rdfs:domain  ex:Animal .
+ex:livesIn  rdfs:domain  ex:Animal .
 
-# predator-prey property — in the real YAGO schema as yago:consumes (from wdt:P1034)
-# domain and range are both Taxon (not Animal), which is why it survives for taxa
-ex:consumes      rdfs:domain  ex:Taxon ;
-                 rdfs:range   ex:Taxon .
+# predator-prey property — mirrors yago:consumes (wdt:P1034), domain/range Taxon
+# this is why it survives in YAGO for taxa
+ex:consumes  rdfs:domain  ex:Taxon ;
+             rdfs:range   ex:Taxon .
 
 # entity-level properties (about the taxon as a named entity)
 ex:parentTaxon         rdfs:domain  ex:Taxon ;
@@ -32,17 +28,3 @@ ex:parentTaxon         rdfs:domain  ex:Taxon ;
 
 ex:conservationStatus  rdfs:domain  ex:Taxon ;
                        rdfs:range   ex:ConservationStatus .
-
-ex:firstDescribedBy    rdfs:domain  ex:Taxon .
-
-# properties used to demonstrate wrong inferences
-ex:DomesticAnimal      rdf:type         rdfs:Class .
-ex:BiologicalOrganism  rdf:type         rdfs:Class .
-ex:PhysicalObject      rdf:type         rdfs:Class .
-
-ex:DomesticAnimal      rdfs:subClassOf  ex:Animal .
-ex:Animal              rdfs:subClassOf  ex:BiologicalOrganism .
-ex:BiologicalOrganism  rdfs:subClassOf  ex:PhysicalObject .
-
-ex:isDomesticated      rdfs:domain      ex:DomesticAnimal .
-ex:hasGPSTag           rdfs:domain      ex:PhysicalObject .

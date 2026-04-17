@@ -1,0 +1,29 @@
+@prefix ex:   <http://example.org/> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-syntax-ns#> .
+@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix owl:  <http://www.w3.org/2002/07/owl#> .
+
+# ── UC2 alternative: generic sentence expressed as OWL class axiom ────────────
+#
+# Problem: :Canis_lupus :eats :Deer does not propagate to instances.
+# Attempt: express it as a someValuesFrom restriction on the class.
+# This reads "every wolf eats at least one deer" — universal quantification.
+# We test whether this is too strong by adding Bruno, a wolf that only eats
+# commercial food (a legitimate exception to the generic statement).
+
+ex:Canidae      rdf:type  owl:Class ; rdfs:subClassOf ex:Animal .
+ex:Canis        rdf:type  owl:Class ; rdfs:subClassOf ex:Canidae .
+ex:Canis_lupus  rdf:type  owl:Class ; rdfs:subClassOf ex:Canis .
+
+# Attempt to encode generic sentence as class axiom
+ex:Canis_lupus  rdfs:subClassOf
+    [ rdf:type            owl:Restriction ;
+      owl:onProperty      ex:eats ;
+      owl:someValuesFrom  ex:Deer ] .
+
+# Tito: wild wolf, no explicit diet asserted
+ex:Tito   rdf:type  ex:Canis_lupus .
+
+# Bruno: wolf in captivity, only eats commercial food — a legitimate exception
+ex:Bruno  rdf:type  ex:Canis_lupus ;
+          ex:eats   ex:CommercialFood .

@@ -1,0 +1,70 @@
+@prefix ex:   <http://example.org/> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix owl:  <http://www.w3.org/2002/07/owl#> .
+@prefix xsd:  <http://www.w3.org/2001/XMLSchema#> .
+
+# ═══════════════════════════════════════════════════════════════════
+# UC1 — Taxonomy node with entity-level facts (H₂O)
+# ═══════════════════════════════════════════════════════════════════
+
+# Taxonomy (class role)
+ex:H2O  rdf:type        owl:Class ;
+        rdfs:subClassOf ex:Oxide ;
+        rdfs:subClassOf ex:HydrogenCompound ;
+        rdfs:subClassOf ex:InorganicCompound .
+
+# Entity facts (individual role)
+ex:H2O  rdf:type             ex:ChemicalSubstance ;
+        ex:molecularFormula  "H2O" ;
+        ex:boilingPoint      "100"^^xsd:decimal ;
+        ex:molarMass         "18.015"^^xsd:decimal ;
+        ex:CASNumber         "7732-18-5" .
+
+# Link from container — requires H2O as typed instance
+ex:MyBottle  rdf:type    ex:Container ;
+             ex:contains ex:H2O .
+
+# ═══════════════════════════════════════════════════════════════════
+# UC2 — Drug as active ingredient (Aspirin)
+# ═══════════════════════════════════════════════════════════════════
+
+# Taxonomy (class role)
+ex:Aspirin  rdf:type        owl:Class ;
+            rdfs:subClassOf ex:NSAID ;
+            rdfs:subClassOf ex:Analgesic .
+
+# Entity facts (individual role)
+ex:Aspirin  rdf:type               ex:Drug ;
+            ex:mechanismOfAction   ex:COX_inhibitor ;
+            ex:treats              ex:Headache ;
+            ex:treats              ex:Fever ;
+            ex:contraindication    ex:PepticUlcer ;
+            ex:CASNumber           "50-78-2" .
+
+# Pharmacological links — require Aspirin as typed instance
+ex:Prescription_42  rdf:type     ex:Person ;
+                    ex:prescribes ex:Aspirin .
+
+ex:Patient_7  rdf:type       ex:Person ;
+              ex:intolerantTo ex:Aspirin .
+
+# ═══════════════════════════════════════════════════════════════════
+# UC3 — ATC pharmaceutical classification codes
+# ═══════════════════════════════════════════════════════════════════
+
+# ATC_A: instance of ATCClassification AND class for ATC_A01
+ex:ATC_A  rdf:type        owl:Class ;           # class role
+          rdf:type        ex:ATCClassification ; # individual role
+          ex:atcCode      "A" ;
+          ex:atcDescription "Alimentary tract and metabolism" .
+
+ex:ATC_A01  rdf:type        owl:Class ;
+            rdf:type        ex:ATCClassification ;
+            rdf:type        ex:ATC_A ;            # typed as instance of ATC_A
+            ex:atcCode      "A01" ;
+            ex:atcDescription "Stomatological preparations" .
+
+ex:ATC_A01A  rdf:type  ex:ATC_A01 ;             # instance of ATC_A01
+             ex:atcCode "A01A" ;
+             ex:atcDescription "Stomatological preparations" .

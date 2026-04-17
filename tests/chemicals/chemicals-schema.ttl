@@ -1,0 +1,57 @@
+@prefix ex:   <http://example.org/> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix owl:  <http://www.w3.org/2002/07/owl#> .
+
+# ── Classes ───────────────────────────────────────────────────────────────────
+
+ex:ChemicalSubstance   rdf:type  rdfs:Class .
+ex:ChemicalCompound    rdf:type  rdfs:Class .
+ex:Oxide               rdf:type  rdfs:Class .
+ex:HydrogenCompound    rdf:type  rdfs:Class .
+ex:InorganicCompound   rdf:type  rdfs:Class .
+ex:NSAID               rdf:type  rdfs:Class .
+ex:Analgesic           rdf:type  rdfs:Class .
+ex:Drug                rdf:type  rdfs:Class .
+ex:PharmacologicalTarget  rdf:type  rdfs:Class .
+ex:MedicalCondition    rdf:type  rdfs:Class .
+ex:Person              rdf:type  rdfs:Class .
+ex:Container           rdf:type  rdfs:Class .
+ex:ATCClassification   rdf:type  rdfs:Class .
+
+ex:ChemicalCompound    rdfs:subClassOf  ex:ChemicalSubstance .
+ex:Oxide               rdfs:subClassOf  ex:ChemicalCompound .
+ex:HydrogenCompound    rdfs:subClassOf  ex:ChemicalCompound .
+ex:InorganicCompound   rdfs:subClassOf  ex:ChemicalCompound .
+ex:NSAID               rdfs:subClassOf  ex:Drug .
+ex:Analgesic           rdfs:subClassOf  ex:Drug .
+
+# ── Properties ────────────────────────────────────────────────────────────────
+
+# UC1 — entity-level properties on chemical substances
+ex:molecularFormula  rdfs:domain  ex:ChemicalSubstance .
+ex:boilingPoint      rdfs:domain  ex:ChemicalSubstance .
+ex:molarMass         rdfs:domain  ex:ChemicalSubstance .
+ex:CASNumber         rdfs:domain  ex:ChemicalSubstance .
+
+# UC1 — link from container to substance (requires substance as instance)
+ex:contains          rdfs:domain  ex:Container ;
+                     rdfs:range   ex:ChemicalSubstance .
+
+# UC2 — pharmacological properties (require drug as instance)
+ex:mechanismOfAction  rdfs:domain  ex:Drug ;
+                      rdfs:range   ex:PharmacologicalTarget .
+ex:treats             rdfs:domain  ex:Drug ;
+                      rdfs:range   ex:MedicalCondition .
+ex:contraindication   rdfs:domain  ex:Drug ;
+                      rdfs:range   ex:MedicalCondition .
+
+# UC2 — prescription link (requires drug as instance)
+ex:prescribes         rdfs:domain  ex:Person ;
+                      rdfs:range   ex:Drug .
+ex:intolerantTo       rdfs:domain  ex:Person ;
+                      rdfs:range   ex:Drug .
+
+# UC3 — ATC classification properties
+ex:atcCode            rdfs:domain  ex:ATCClassification .
+ex:atcDescription     rdfs:domain  ex:ATCClassification .

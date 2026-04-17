@@ -1,0 +1,37 @@
+@prefix ex:   <http://example.org/> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-syntax-ns#> .
+@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix owl:  <http://www.w3.org/2002/07/owl#> .
+
+# ── Classes ───────────────────────────────────────────────────────────────────
+
+ex:Disease             rdf:type  rdfs:Class .
+ex:InfectiousDisease   rdf:type  rdfs:Class .
+ex:RespiratoryDisease  rdf:type  rdfs:Class .
+ex:CoronavirusDisease  rdf:type  rdfs:Class .
+ex:Pathogen            rdf:type  rdfs:Class .
+ex:Person              rdf:type  rdfs:Class .
+ex:BodySystem          rdf:type  rdfs:Class .
+ex:Symptom             rdf:type  rdfs:Class .
+
+ex:InfectiousDisease   rdfs:subClassOf  ex:Disease .
+ex:RespiratoryDisease  rdfs:subClassOf  ex:Disease .
+ex:CoronavirusDisease  rdfs:subClassOf  ex:InfectiousDisease .
+
+# ── Properties ────────────────────────────────────────────────────────────────
+
+# entity-level properties (about the disease as a named entity)
+ex:hasICD         rdfs:domain  ex:Disease .
+ex:causedBy       rdfs:domain  ex:Disease ;
+                  rdfs:range   ex:Pathogen .
+ex:firstReported  rdfs:domain  ex:Disease .
+
+# generic-sentence properties
+ex:affects   rdfs:domain  ex:Disease ;
+             rdfs:range   ex:BodySystem .
+ex:symptoms  rdfs:domain  ex:Disease ;
+             rdfs:range   ex:Symptom .
+
+# link from other entities — requires disease to be a typed instance
+ex:deathCause  rdfs:domain  ex:Person ;
+               rdfs:range   ex:Disease .

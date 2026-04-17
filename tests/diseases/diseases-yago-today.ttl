@@ -1,0 +1,46 @@
+@prefix ex:   <http://example.org/> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xsd:  <http://www.w3.org/2001/XMLSchema#> .
+
+# ── What YAGO actually stores ─────────────────────────────────────────────────
+#
+# Real YAGO IRI: yago:COVID-19 (wd:Q84263196), verified from server data.
+# Here modelled as ex:COVID_19 for consistency with the desired graph.
+#
+# Stage 02: COVID-19 has wdt:P279 (subclass of: coronavirus disease, respiratory
+#           disease). No instanceIndicator fires (P580 appears only as a qualified
+#           statement, not a direct triple). COVID-19 enters the taxonomy.
+#
+# Stage 03: COVID-19 is in the taxonomy → assigned rdf:type rdfs:Class.
+#           All entity-level facts (ICD code, causedBy, firstReported) fail the
+#           domain check and are dropped. There is no schema:MedicalCondition in
+#           the YAGO 4.5 schema, so COVID-19 has no rdf:type and no properties.
+#
+# Stage 04: yago:deathCause expects an instance; COVID-19 is a class →
+#           YAGO creates yago:COVID-19_generic_instance (a blank node) and uses
+#           that in place of COVID-19. The direct link JavierMarias:deathCause
+#           :COVID-19 is broken; only the join via the generic instance works.
+#
+# Verified from real YAGO data on the university server:
+#   yago:COVID-19 rdfs:subClassOf yago:Coronavirus_diseases  ← preserved
+#   No entity facts in 05-yago-final-wikipedia.tsv            ← all dropped
+
+ex:COVID_19  rdf:type        rdfs:Class ;
+             rdfs:subClassOf ex:CoronavirusDisease ;
+             rdfs:subClassOf ex:RespiratoryDisease .
+
+# ex:COVID_19 ex:hasICD "U07.1"                 ← DROPPED (no schema:MedicalCondition)
+# ex:COVID_19 ex:causedBy ex:SARS_CoV_2         ← DROPPED (same reason)
+# ex:COVID_19 ex:firstReported "2019-12-01"     ← DROPPED (same reason)
+# ex:COVID_19 ex:affects ex:RespiratorySystem   ← DROPPED (same reason)
+# ex:COVID_19 ex:symptoms ex:Fever              ← DROPPED (same reason)
+
+# The deathCause link is rewritten by Stage 04:
+ex:COVID_19_generic_instance  rdf:type  ex:COVID_19 .   # synthetic blank node
+
+ex:JavierMarias  ex:deathCause  ex:COVID_19_generic_instance .
+# ex:JavierMarias ex:deathCause ex:COVID_19   ← BROKEN (COVID_19 is not an instance)
+
+# ex:Case_42 rdf:type ex:COVID_19             ← IMPOSSIBLE (COVID_19 is a class
+#                                                with no rdf:type in YAGO schema)
