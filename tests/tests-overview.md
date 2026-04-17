@@ -226,6 +226,59 @@ needed — which is precisely the punning tension.
 
 ---
 
+## Reasoner experiment: what happens if we attach properties directly to a class node?
+
+**Question**: if `Canis_lupus` is a class and we attach properties to it directly — entity facts
+and generic sentences — what does RDFS closure give us? Do properties propagate to instances?
+
+Treat the class node as also an individual, write all triples on it, and run a reasoner.
+
+**Setup** (`tests/reasoner_test.py`):
+
+```python
+# Canis_lupus as class node + entity facts + generic sentences
+g.add((EX.Canis_lupus, RDF.type, OWL.Class))
+g.add((EX.Canis_lupus, RDFS.subClassOf, EX.Canis))
+g.add((EX.Canis_lupus, EX.conservationStatus, EX.LeastConcern))  # entity fact
+g.add((EX.Canis_lupus, EX.eats, EX.Deer))                        # generic sentence
+g.add((EX.Tito, RDF.type, EX.Canis_lupus))                       # individual wolf
+owlrl.DeductiveClosure(owlrl.RDFS_Semantics).expand(g)
+```
+
+**Results**:
+
+| Check                                                                  | Result |
+| ---------------------------------------------------------------------- | ------ |
+| `Canis_lupus rdf:type owl:Class` AND `rdf:type ex:Taxon` after closure | ✓      |
+| `Canis_lupus ex:conservationStatus ex:LeastConcern` queryable          | ✓      |
+| `Canis_lupus ex:eats ex:Deer` queryable                                | ✓      |
+| `Tito rdf:type Canis` inferred (rdfs9 via subclass chain)              | ✓      |
+| `Tito ex:eats ex:Deer` inferred                                        | ✗      |
+
+**Why entity facts work but generic sentences do not propagate**:
+
+RDFS has one rule that propagates information from a class to its instances: **rdfs9**.
+
+```
+rdfs9:  C rdfs:subClassOf D  +  x rdf:type C  →  x rdf:type D
+```
+
+This rule only propagates `rdf:type`. There is no analogous rule for other properties.
+`Canis_lupus eats Deer` is a triple on the node `Canis_lupus` — RDFS has no rule that says
+"if X is an instance of C, and C has property P, then X also has property P."
+
+The asymmetry is intentional: `rdf:type` is safe to propagate because class membership is
+definitional (if Tito is a wolf, he is by definition an animal). But `eats Deer` is not
+definitional — it is a generic statement true of the kind in general, and individual wolves
+may be exceptions (a wolf in captivity may eat only commercial food).
+
+**OWL does not help either (TBD)**: the only OWL mechanism that could propagate to instances is
+`owl:someValuesFrom`, which universalizes the statement ("every wolf eats at least one deer")
+and produces anonymous blank node witnesses rather than the named individual `:Deer` (might not be a problem).
+See the OWL restriction test in Animals UC2 above.
+
+---
+
 ## Summary
 
 | Use case                                            | Desired graph works? | YAGO today | Key failure mode                                   |
@@ -238,8 +291,3 @@ needed — which is precisely the punning tension.
 | Chemicals UC1: `H2O CASNumber "7732-18-5"`          | ✓                    | ✗          | same as diseases                                   |
 | Chemicals UC2: direct `prescribes` link             | ✓                    | ✗          | same generic instance substitution                 |
 | Chemicals UC3: ATC multi-level punning              | ✓ (partial)          | ✗          | rdf:type does not chain like subClassOf            |
-
-**Generic sentences** are the one failure not specific to YAGO: no formalism correctly expresses
-"wolves generally eat deer" in a way that propagates to individuals without being either too
-strong (universal quantification) or non-propagating. All other failures in the table are
-YAGO-specific and would be resolved if the binary class/instance choice were lifted.
